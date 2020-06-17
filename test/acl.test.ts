@@ -68,8 +68,6 @@ describe("Cli tests", () => {
             Name: "Guest account",
             Slug: "guest"
         });
-
-        
     });
 
 });
