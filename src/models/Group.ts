@@ -1,5 +1,5 @@
 import { GroupMetadata } from './GroupMetadata';
-import {ModelBase, Primary, Connection, Model, Unique, HasMany } from "@spinajs/orm";
+import {ModelBase, Primary, Connection, Model, Unique, HasMany, Relation } from "@spinajs/orm";
 
 @Connection("default")
 @Model("groups")
@@ -19,6 +19,6 @@ export class Group extends ModelBase<Group>{
      * Group additional information. Can be anything
      */
     @HasMany(GroupMetadata)
-    public Metadata: GroupMetadata[];
+    public Metadata: Relation<GroupMetadata>;
 
 }

@@ -1,4 +1,4 @@
-import { AuthProvider, ICredentials, PasswordProvider } from "./interfaces";
+import { AuthProvider, PasswordProvider } from "./interfaces";
 import { User } from "./models/User";
 import { Autoinject, IContainer } from "@spinajs/di";
 
@@ -19,18 +19,22 @@ export class SimpleDbAuthProvider implements AuthProvider<User> {
         return false;
     }
 
-    public async authenticate(credentials: ICredentials): Promise<User> {
+    public async authenticate(login: string, password: string): Promise<User> {
 
         const pwd = this.Container.resolve<PasswordProvider>(PasswordProvider);
         const result = await User.where({
-            Email: credentials.getLogin()
-        }).first<User>();
+            Login: login
+        })
+            .populate("Metadata")
+            .populate("Groups")
+            .populate("Roles")
+            .first<User>();
 
         if (!result) {
             return null;
         }
 
-        const valid = await pwd.verify(result.Password, credentials.getPassword());
+        const valid = await pwd.verify(result.Password, password);
         if (valid) {
             return result;
         }

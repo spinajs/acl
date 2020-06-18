@@ -36,7 +36,7 @@ export class DeleteMetadata implements ICliCommand {
             }
 
             // when owner & key already exists update its content
-            await user.Metadata[0].destroy();
+            await user.Metadata.remove(user.Metadata[0]);
 
             this.Log.info("Metadata deleted");
 

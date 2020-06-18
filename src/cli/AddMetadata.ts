@@ -32,10 +32,10 @@ export class AddMetadata implements ICliCommand {
                 Key: key,
                 Value: value
             });
-            meta.Owner = user;
+             
 
             // when owner & key already exists update its content
-            await meta.save(InsertBehaviour.OnDuplicateUpdate);
+            await user.Metadata.add(meta, InsertBehaviour.OnDuplicateUpdate);
 
             this.Log.info("Metadata added !");
 

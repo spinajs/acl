@@ -1,4 +1,3 @@
-import { UserToRole } from '../models/UserToRole';
 import { Cli, ICliCommand } from "@spinajs/cli";
 import { Logger, Log } from "../../../log/lib";
 import { User } from "../models/User";
@@ -37,11 +36,7 @@ export class GrantRole implements ICliCommand {
                 return -1;
             }
 
-            const relation = new UserToRole();
-            relation.User = user;
-            relation.Role = role;
-
-            await relation.save(InsertBehaviour.OnDuplicateIgnore);
+            await user.Roles.add(role,InsertBehaviour.OnDuplicateIgnore);
 
             this.Log.info("Role granted"); 
 

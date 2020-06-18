@@ -28,7 +28,7 @@ export class Roles implements ICliCommand {
                 return 0;
             }
 
-            this.Log.info(`User: ${user.Id}:${user.Email}, name: ${user.DisplayName}, created at: ${user.CreatedAt}`);
+            this.Log.info(`User: ${user.Id}:${user.Email}, name: ${user.NiceName}, created at: ${user.CreatedAt}`);
             this.Log.info(`Roles: ${user.Roles.map(r => r.Slug).join(",")}`);
             this.Log.info(`Metadata`);
 

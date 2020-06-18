@@ -98,13 +98,13 @@ export class AclInitialMigration extends OrmMigration {
         await connection.index()
             .unique()
             .table("user_metadatas")
-            .name("owner_key_idx")
+            .name("owner_user_meta_key_idx")
             .columns(["owner_id", "Key"]);
 
         await connection.index()
             .unique()
             .table("group_metadatas")
-            .name("owner_key_idx")
+            .name("owner_group_meta_key_idx")
             .columns(["owner_id", "Key"]);
 
 
@@ -134,7 +134,7 @@ export class AclInitialMigration extends OrmMigration {
 
         await connection.index()
             .unique()
-            .table("groups_to_user")
+            .table("groups_to_users")
             .name("group_to_user_idx")
             .columns(["user_id", "group_id"]);
 

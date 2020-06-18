@@ -30,8 +30,7 @@ export class GrantRole implements ICliCommand {
                 this.Log.info("Role not assigned to user, nothing to revoke");
                 return 0;
             }
-
-            user.Roles[0].destroy();
+            await user.Roles.remove(user.Roles[0]);
 
             this.Log.info("Role revoked");
 

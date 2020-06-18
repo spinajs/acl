@@ -1,7 +1,5 @@
-import { ModelBase, Primary, BelongsTo, Connection, Model } from "@spinajs/orm";
-import { User } from "./User";
-import { Role } from "./Role";
-
+import { ModelBase, Primary, Connection, Model } from "@spinajs/orm";
+ 
 @Connection("default")
 @Model("user_to_role")
 export class UserToRole extends ModelBase<UserToRole>
@@ -9,9 +7,13 @@ export class UserToRole extends ModelBase<UserToRole>
     @Primary()
     public Id: number;
 
-    @BelongsTo()
-    public User: User;
+    /**
+     * Relation field
+     */
+    public user_id: number;
 
-    @BelongsTo()
-    public Role: Role;
+    /**
+     * Relation field
+     */
+    public role_id: number;
 }

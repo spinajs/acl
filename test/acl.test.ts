@@ -1,3 +1,4 @@
+import { UserToRole } from './../src/models/UserToRole';
 
 import { DI } from '@spinajs/di';
 import { FrameworkConfiguration, Configuration } from "@spinajs/configuration";
@@ -7,7 +8,7 @@ import { SqliteOrmDriver } from "@spinajs/orm-sqlite";
 import { Orm } from "@spinajs/orm";
 import chaiAsPromised from 'chai-as-promised';
 import * as chai from 'chai';
-import { Acl } from './../src';
+import { Acl, User } from './../src';
 import { Role } from '../src/models/Role';
 
 const expect = chai.expect;
@@ -57,7 +58,7 @@ describe("Cli tests", () => {
 
         await acl();
 
-        const roles : Role[] = await Role.all().populate("Resources");
+        const roles: Role[] = await Role.all().populate("Resources");
 
         expect(roles.length).to.eq(2);
         expect(roles[0]).to.include({
@@ -69,5 +70,85 @@ describe("Cli tests", () => {
             Slug: "guest"
         });
     });
+
+    it("User should add / delete role", async () => {
+        await acl();
+
+        const roles: Role[] = await Role.all().populate("Resources");
+        const user = new User({
+            Email: "test@wp.pl",
+            Login: "test",
+            Password: "1234t5fsfD2",
+            NiceName: "sad",
+        });
+
+        await user.save();
+        await user.addRole(roles[0]);
+
+
+        let role = await UserToRole.where({
+            user_id: user.Id,
+            role_id: roles[0].Id
+        }).first();
+
+        let check = await User.where({ Id: user.Id}).populate("Roles").first<User>();
+
+        expect(role).to.be.not.null;
+        expect(check.Roles.length).to.eq(1);
+
+        await user.removeRole(roles[0]);
+
+        role = await UserToRole.where({
+            user_id: user.Id,
+            role_id: roles[0].Id
+        }).first();
+
+        check = await User.where({ Id: user.Id}).populate("Roles").first<User>();
+
+        expect(role).to.be.undefined;
+        expect(check.Roles.length).to.eq(0);
+
+    })
+
+    
+
+    it("User should be allowed", async () => {
+        await acl();
+
+        const roles: Role[] = await Role.all().populate("Resources");
+        const user = new User({
+            Email: "test@wp.pl",
+            Login: "test",
+            Password: "1234t5fsfD2",
+            NiceName: "sad",
+        });
+
+        await user.save();
+        await user.addRole(roles[0]);
+
+        const allowed = await user.isAllowed("users", "get");
+
+        expect(allowed).to.be.true;
+    })
+
+    it("User should be disallowed", async () => {
+        await acl();
+
+        const roles: Role[] = await Role.all().populate("Resources");
+        const user = new User({
+            Email: "test@wp.pl",
+            Login: "test",
+            Password: "1234t5fsfD2",
+            NiceName: "sad",
+        });
+
+        await user.save();
+        await user.addRole(roles[0]);
+        await user.removeRole(roles[0]);
+
+        const allowed = await user.isAllowed("users", "get");
+
+        expect(allowed).to.be.false;
+    })
 
 });

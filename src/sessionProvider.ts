@@ -17,6 +17,8 @@ export class Session implements ISession {
 
     public Expiration: Date;
 
+    public Data : any;
+
     private _sessionId: string;
 
     constructor() {

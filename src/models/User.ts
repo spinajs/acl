@@ -1,5 +1,5 @@
 import { GroupToUser } from './GroupToUser';
-import { ModelBase, Primary, Connection, Model, Unique, CreatedAt, SoftDelete, HasMany, HasManyToMany } from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model, Unique, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation} from "@spinajs/orm";
 import { UserMetadata } from "./UserMetadata";
 import { UserToRole } from "./UserToRole";
 import { Role } from "./Role";
@@ -23,6 +23,9 @@ export class User extends ModelBase<User>  {
     @Unique()
     public Email: string;
 
+    @Unique()
+    public Login: string;
+
     /**
      * Hashed password for user
      */
@@ -36,7 +39,7 @@ export class User extends ModelBase<User>  {
     /**
      * Displayed name ( for others to see )
      */
-    public DisplayName: string;
+    public NiceName: string;
 
     /**
      * User creation date
@@ -54,19 +57,19 @@ export class User extends ModelBase<User>  {
      * User additional information. Can be anything
      */
     @HasMany(UserMetadata)
-    public Metadata: UserMetadata[];
+    public Metadata: Relation<UserMetadata>;
 
     /**
      * User roles eg. admin, guest etc.
      */
     @HasManyToMany(UserToRole, Role)
-    public Roles: Role[];
+    public Roles: Relation<Role>;
 
     /**
      * Assigned groups to user
      */
     @HasManyToMany(GroupToUser, Group)
-    public Groups: Group[];
+    public Groups: Relation<Group>;
 
     /**
      * Fast resource lookup for access checking
@@ -81,8 +84,8 @@ export class User extends ModelBase<User>  {
     public async addRole(role: Role): Promise<void> {
 
         const userToRole = new UserToRole();
-        userToRole.Role = role;
-        userToRole.User = this;
+        userToRole.role_id = role.Id;
+        userToRole.user_id = this.Id;
 
         await userToRole.save();
 
@@ -95,12 +98,11 @@ export class User extends ModelBase<User>  {
      * @param role role to delete from user
      */
     public async  removeRole(role: Role): Promise<void> {
-
-        await role.destroy();
-
         const index = this.Roles.findIndex(r => r.Id === role.Id);
         if (index !== -1) {
             this.Roles.splice(index, 1);
+
+            await this.Roles.remove(role);
         }
     }
 
@@ -114,7 +116,7 @@ export class User extends ModelBase<User>  {
     public async isAllowed(resource: Resource | string, permission: string | ResourcePermission): Promise<boolean> {
 
         if (this.Roles.length === 0) {
-            await this.populate("Roles", function () {
+            await this.Roles.populate(function () {
                 this.populate("Parent");
                 this.populate("Resources");
             });
@@ -127,6 +129,10 @@ export class User extends ModelBase<User>  {
         const resName = (resource instanceof Resource) ? resource.Slug : resource;
 
         if (!this._cachedResources.has(resName)) {
+            return false;
+        }   
+
+        if (this._cachedResources.has(resName) && permission ===  ResourcePermission.Any) {
             return false;
         }
 

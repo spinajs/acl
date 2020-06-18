@@ -37,11 +37,13 @@
   },
   "homepage": "https://github.com/spinajs/acl#readme",
   "dependencies": {
-    "@spinajs/configuration": "^1.0.5",
-    "@spinajs/di": "^1.0.12",
-    "@spinajs/exceptions": "^1.0.0",
-    "@spinajs/orm": "^1.0.33",
-    "@spinajs/reflection": "^1.0.4",
+    "@spinajs/cli": "^1.0.1",
+    "@spinajs/configuration": "^1.0.10",
+    "@spinajs/di": "^1.0.17",
+    "@spinajs/exceptions": "^1.0.3",
+    "@spinajs/log": "^1.0.7",
+    "@spinajs/orm": "^1.0.44",
+    "@spinajs/reflection": "^1.0.7",
     "argon2": "^0.26.2",
     "entropy-string": "^4.2.0",
     "lodash": "^4.17.14"

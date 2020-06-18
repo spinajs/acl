@@ -8,7 +8,7 @@ import { Logger, Log } from "../../../log/lib";
 
 @Cli("acl:new-user <login>", "Creates new user")
 @Option("-p, --password", "User password. If not set password is generated and printed to console")
-@Option("-n, --display_name", "User friendly name eg. name with surname")
+@Option("-n, --nice_name", "User friendly name eg. name with surname")
 export class NewUser implements ICliCommand {
 
     @Logger()
@@ -36,14 +36,14 @@ export class NewUser implements ICliCommand {
         hashedPassword = await password.hash(userPassword);
         const user = new User({
             Email: login,
-            DisplayName: command.display_name,
+            DisplayName: command.nice_name,
             Password: hashedPassword,
             CreatedAt: new Date(),
         });
 
         const exists = await auth.exists(user);
         if (exists) {
-            this.Log.warn(`User ${user.Email}:${user.DisplayName} already exists`);
+            this.Log.warn(`User ${user.Email}:${user.NiceName} already exists`);
             return -1;
         }
 
@@ -54,7 +54,7 @@ export class NewUser implements ICliCommand {
             return -1;
         }
 
-        this.Log.info(`User ${user.Email}:${user.DisplayName} added to db !`);
+        this.Log.info(`User ${user.Email}:${user.NiceName} added to db !`);
 
         return 0;
     }

@@ -18,19 +18,14 @@ export enum ResourcePermission
     /**
      * Allows to delete resource
      */
-    Delete = "delete"
+    Delete = "delete",
+
+    /**
+     * Permission is granted when resource is assigned to role / user. Dont care about read/write/other
+     */
+    Any = "*"
 }
-
-/**
- * Credentials used to authenticate
- */
-export interface ICredentials {
-
-    getLogin(): string;
-
-    getPassword(): string;
-}
-
+ 
 export interface ISession {
 
     /**
@@ -42,6 +37,11 @@ export interface ISession {
      * Expiration date. After that date session is invalid
      */
     Expiration: Date;
+
+    /**
+     * Data holds by session
+     */
+    Data: any;
 }
 
 
@@ -78,7 +78,7 @@ export abstract class AuthProvider<U = User>
 {
     public abstract exists(user: U): Promise<boolean>;
 
-    public abstract authenticate(credentials: ICredentials): Promise<U>;
+    public abstract authenticate(login: string, password: string): Promise<U>;
 }
 
 export abstract class SessionProvider<T = ISession>

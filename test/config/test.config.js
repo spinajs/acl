@@ -49,7 +49,7 @@ module.exports =
                     Queries: true
                 },
                 Driver: "orm-driver-sqlite",
-                Filename: "D:\\acl.sqlite",
+                Filename: ":memory:",
                 Name: "sqlite",
                 Migration: {
                     Table: "orm_migrations"
