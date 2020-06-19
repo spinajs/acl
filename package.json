@@ -1,6 +1,6 @@
 {
   "name": "@spinajs/acl",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "framework user acl module",
   "main": "lib/index.js",
   "private": false,

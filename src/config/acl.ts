@@ -15,23 +15,7 @@ module.exports = {
     acl: {
 
         // default roles to manage users & guest account
-        roles: [
-            {
-                Slug: "admin.user",
-                Name: "User management",
-                Description: "User administration privliges ( add, delete, update users )",
-                Resources: [{
-                    Slug: "users",
-                    Permissions: ["put", "delete", "get"]
-                }]
-            },
-            {
-                Slug: "guest",
-                Name: "Guest account",
-                Description: "Simple guest account with no privliges",
-                Resources: []
-            }
-        ],
+        roles: [],
         defaultRole: "guest",
         session: {
             

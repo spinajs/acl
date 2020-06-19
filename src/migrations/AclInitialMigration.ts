@@ -25,7 +25,7 @@ export class AclInitialMigration extends OrmMigration {
             table.text("Value").notNull();
             table.int("owner_id").notNull();
 
-            table.foreignKey("owner_id").references("users", "id").cascade();
+            table.foreignKey("owner_id").references("users", "Id").cascade();
         });
 
         await connection.schema().createTable("roles", (table) => {
@@ -36,13 +36,6 @@ export class AclInitialMigration extends OrmMigration {
             table.string("parent_slug");
         });
 
-        await connection.schema().createTable("groups", (table) => {
-            table.int("Id").autoIncrement().primaryKey();
-            table.string("Slug", 32).unique().notNull();
-            table.string("Name", 128).notNull();
-            table.text("Description");
-        });
-
         await connection.schema().createTable("group_metadatas", (table) => {
             table.int("Id").autoIncrement().primaryKey();
             table.string("Key", 255).notNull();
@@ -50,16 +43,6 @@ export class AclInitialMigration extends OrmMigration {
             table.int("owner_id").notNull();
 
             table.foreignKey("owner_id").references("group", "Id").cascade();
-        });
-
-
-        await connection.schema().createTable("groups_to_users", (table) => {
-            table.int("Id").autoIncrement().primaryKey();
-            table.int("user_id").notNull();
-            table.int("group_id").notNull();
-
-            table.foreignKey("user_id").references("users", "Id").cascade();
-            table.foreignKey("group_id").references("groups", "Id").cascade();
         });
 
         await connection.schema().createTable("user_to_role", (table) => {
@@ -103,13 +86,6 @@ export class AclInitialMigration extends OrmMigration {
 
         await connection.index()
             .unique()
-            .table("group_metadatas")
-            .name("owner_group_meta_key_idx")
-            .columns(["owner_id", "Key"]);
-
-
-        await connection.index()
-            .unique()
             .table("roles")
             .name("role_slug_idx")
             .columns(["Slug"]);
@@ -134,20 +110,60 @@ export class AclInitialMigration extends OrmMigration {
 
         await connection.index()
             .unique()
-            .table("groups_to_users")
-            .name("group_to_user_idx")
-            .columns(["user_id", "group_id"]);
-
-        await connection.index()
-            .unique()
             .table("user_to_role")
             .name("user_role_idx")
             .columns(["role_id", "user_id"]);
+
+        await this.fillUp(connection);
 
     }
 
     // tslint:disable-next-line: no-empty
     public async down(_connection: OrmDriver): Promise<void> {
 
+    }
+
+    private async fillUp(connection: OrmDriver) {
+        const roles = [
+            {
+                Slug: "admin.user",
+                Name: "User management",
+                Description: "User administration privliges ( add, delete, update users )",
+                Resources: [{
+                    Slug: "users",
+                    Name: "Users in system",
+                    Permissions: ["put", "delete", "get"]
+                }]
+            },
+            {
+                Slug: "guest",
+                Name: "Guest account",
+                Description: "Simple guest account with no privliges",
+                Resources: []
+            }
+        ];
+
+        for (const role of roles) {
+
+            const roleId = await connection.insert().into("roles").values({
+                Slug: role.Slug,
+                Name: role.Name,
+                Description: role.Description
+            });
+
+            for (const resource of role.Resources) {
+
+                const resourceId = await connection.insert().into("resources").values({
+                    Slug: resource.Slug,
+                    Name: resource.Name
+                }).ignore();
+
+                await connection.insert().into("role_to_resource").values({
+                    role_id: roleId,
+                    resource_id: resourceId,
+                    Permissions: resource.Permissions.join(",")
+                });
+            }
+        }
     }
 }
