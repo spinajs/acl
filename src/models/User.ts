@@ -1,4 +1,4 @@
-import { ModelBase, Primary, Connection, Model, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation, Uuid} from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation} from "@spinajs/orm";
 import { UserMetadata } from "./UserMetadata";
 import { UserToRole } from "./UserToRole";
 import { Role } from "./Role";
@@ -17,7 +17,6 @@ import { ResourcePermission } from "../interfaces";
 export class User extends ModelBase<User>  {
     
     @Primary()
-    @Uuid()
     public Id: string;
 
     public Email: string;

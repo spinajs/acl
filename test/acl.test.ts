@@ -82,7 +82,9 @@ describe("Acl tests", () => {
             NiceName: "sad",
         });
 
+        await user.save();
         await user.Roles.add(roles[0]);
+
 
         let role = await UserToRole.where({
             user_id: user.Id,
@@ -94,7 +96,7 @@ describe("Acl tests", () => {
         expect(role).to.be.not.null;
         expect(check.Roles.length).to.eq(1);
 
-        await user.removeRole(roles[0]);
+        await user.Roles.remove(roles[0]);
 
         role = await UserToRole.where({
             user_id: user.Id,
@@ -121,6 +123,7 @@ describe("Acl tests", () => {
             NiceName: "sad",
         });
 
+        await user.save();
         await user.Roles.add(roles[0]);
 
         const allowed = await user.isAllowed("users", "get");

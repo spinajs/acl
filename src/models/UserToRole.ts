@@ -1,10 +1,9 @@
-import { ModelBase, Primary, Connection, Model, Uuid } from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model } from "@spinajs/orm";
  
 @Connection("default")
 @Model("user_to_role")
 export class UserToRole extends ModelBase<UserToRole>
 {
-    @Uuid()
     @Primary()
     public Id: string;
 

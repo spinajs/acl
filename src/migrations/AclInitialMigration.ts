@@ -9,7 +9,7 @@ export class AclInitialMigration extends OrmMigration {
     public async up(connection: OrmDriver): Promise<void> {
 
         await connection.schema().createTable("users", (table) => {
-            table.binary("Id", 16).primaryKey();
+            table.int("Id").autoIncrement().primaryKey();
             table.string("Login", 64).unique().notNull();
             table.string("Email", 64).unique().notNull();
             table.string("Password", 64).notNull();
@@ -20,16 +20,15 @@ export class AclInitialMigration extends OrmMigration {
         });
 
         await connection.schema().createTable("user_metadatas", (table) => {
-            table.binary("Id", 16).primaryKey();
+            table.int("Id").autoIncrement().primaryKey();
             table.string("Key", 255).notNull();
             table.text("Value").notNull();
-            table.binary("user_id", 16).notNull();
-
+            table.int("user_id").notNull();
             table.foreignKey("user_id").references("users", "Id").cascade();
         });
 
         await connection.schema().createTable("roles", (table) => {
-            table.binary("Id", 16).primaryKey();
+            table.int("Id").autoIncrement().primaryKey();
             table.string("Slug", 32).unique().notNull();
             table.string("Name", 128).notNull();
             table.text("Description");
@@ -37,25 +36,25 @@ export class AclInitialMigration extends OrmMigration {
         });
 
         await connection.schema().createTable("user_to_role", (table) => {
-            table.binary("Id", 16).primaryKey();
-            table.binary("user_id", 16).notNull();
-            table.binary("role_id", 16).notNull();
+            table.int("Id").autoIncrement().primaryKey();
+            table.int("user_id").notNull();
+            table.int("role_id").notNull();
 
             table.foreignKey("user_id").references("users", "id").cascade();
             table.foreignKey("role_id").references("roles", "id").cascade();
         });
 
         await connection.schema().createTable("resources", (table) => {
-            table.binary("Id", 16).primaryKey();
+            table.int("Id").autoIncrement().primaryKey();
             table.string("Slug", 32).unique().notNull();
             table.string("Name", 128).notNull();
             table.text("Description");
         });
 
         await connection.schema().createTable("role_to_resource", (table) => {
-            table.binary("Id", 16).primaryKey();
-            table.binary("resource_id", 16).notNull();
-            table.binary("role_id", 16).notNull();
+            table.int("Id").autoIncrement().primaryKey();
+            table.int("resource_id").notNull();
+            table.int("role_id").notNull();
             table.set("Permissions", ["put", "delete", "get"]);
 
             table.foreignKey("resource_id").references("resources", "id").cascade();
@@ -140,7 +139,7 @@ export class AclInitialMigration extends OrmMigration {
                 Slug: role.Slug,
                 Name: role.Name,
                 Description: role.Description
-            }).ignore();
+            });
 
             for (const resource of role.Resources) {
 
@@ -153,7 +152,7 @@ export class AclInitialMigration extends OrmMigration {
                     role_id: roleId,
                     resource_id: resourceId,
                     Permissions: resource.Permissions.join(",")
-                }).ignore();
+                });
             }
         }
     }

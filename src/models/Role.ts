@@ -1,4 +1,4 @@
-import { ModelBase, Primary, Connection, Model, HasManyToMany, BelongsTo, Recursive, Relation, Uuid} from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model, HasManyToMany, BelongsTo, Recursive, Relation} from "@spinajs/orm";
 import { Resource } from "./Resource";
 import { RoleToResource } from "./RoleToResource";
 
@@ -10,7 +10,6 @@ import { RoleToResource } from "./RoleToResource";
 export class Role extends ModelBase<Role>
 {
     @Primary()
-    @Uuid()
     public Id: string;
 
     /**
