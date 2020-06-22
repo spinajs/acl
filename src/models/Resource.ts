@@ -1,4 +1,4 @@
-import {ModelBase, Primary, Connection, Model, Unique, JunctionTable } from "@spinajs/orm";
+import {ModelBase, Primary, Connection, Model, JunctionTable, Uuid } from "@spinajs/orm";
 import { RoleToResource } from "./RoleToResource";
 
 @Connection("default")
@@ -6,7 +6,8 @@ import { RoleToResource } from "./RoleToResource";
 export class Resource extends ModelBase<Resource>{
 
     @Primary()
-    public Id : number;
+    @Uuid()
+    public Id : string;
 
     public Slug : string;
 

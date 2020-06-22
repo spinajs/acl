@@ -1,4 +1,4 @@
-import { ModelBase, Primary, Connection, Model, Set } from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model, Set, Uuid } from "@spinajs/orm";
 import { ResourcePermission } from "../interfaces";
 
 /**
@@ -9,10 +9,10 @@ import { ResourcePermission } from "../interfaces";
 export class RoleToResource extends ModelBase<RoleToResource>
 {
     @Primary()
-    public Id: number;
+    @Uuid()
+    public Id: string;
 
     @Set()
     public Permissions: ResourcePermission[];
-
 
 }

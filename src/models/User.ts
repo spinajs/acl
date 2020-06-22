@@ -1,4 +1,4 @@
-import { ModelBase, Primary, Connection, Model, Unique, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation} from "@spinajs/orm";
+import { ModelBase, Primary, Connection, Model, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation, Uuid} from "@spinajs/orm";
 import { UserMetadata } from "./UserMetadata";
 import { UserToRole } from "./UserToRole";
 import { Role } from "./Role";
@@ -15,8 +15,10 @@ import { ResourcePermission } from "../interfaces";
 @Connection("default")
 @Model("users")
 export class User extends ModelBase<User>  {
+    
     @Primary()
-    public Id: number;
+    @Uuid()
+    public Id: string;
 
     public Email: string;
 
@@ -65,22 +67,6 @@ export class User extends ModelBase<User>  {
      * Fast resource lookup for access checking
      */
     private _cachedResources: Map<string, string[]> = new Map<string, string[]>();
-
-    /**
-     * add role to user
-     * 
-     * @param role role assigned for user
-     */
-    public async addRole(role: Role): Promise<void> {
-
-        const userToRole = new UserToRole();
-        userToRole.role_id = role.Id;
-        userToRole.user_id = this.Id;
-
-        await userToRole.save();
-
-        this.Roles.push(role);
-    }
 
     /**
      * removes role from user
