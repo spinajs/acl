@@ -69,20 +69,6 @@ export class User extends ModelBase<User>  {
     private _cachedResources: Map<string, string[]> = new Map<string, string[]>();
 
     /**
-     * removes role from user
-     * 
-     * @param role role to delete from user
-     */
-    public async  removeRole(role: Role): Promise<void> {
-        const index = this.Roles.findIndex(r => r.Id === role.Id);
-        if (index !== -1) {
-            this.Roles.splice(index, 1);
-
-            await this.Roles.remove(role);
-        }
-    }
-
-    /**
      * 
      * Checks if user have permission for given resource
      * 
