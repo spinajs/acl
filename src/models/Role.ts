@@ -15,7 +15,6 @@ export class Role extends ModelBase<Role>
     /**
      * role slug used in app
      */
-    @Unique()
     public Slug: string;
 
     /**

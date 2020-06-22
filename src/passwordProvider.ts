@@ -1,7 +1,7 @@
 import { PasswordProvider } from "./interfaces";
 
 // tslint:disable-next-line: no-var-requires
-const { Random, charset32 } = require("entropy-string");
+const { Entropy, charset32 } = require("entropy-string");
 import * as argon from "argon2";
 
 /**
@@ -31,7 +31,7 @@ export class BasicPasswordProvider implements PasswordProvider {
     public generate(): string {
 
         // generates password with entropy of 60 bits ( balance of ease vs value )
-        const random = new Random(charset32);
+        const random =  new Entropy({charset: charset32});
         return random.string(60);
     }
 

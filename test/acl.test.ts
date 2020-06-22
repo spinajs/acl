@@ -27,7 +27,7 @@ function acl() {
     return DI.resolve(Acl);
 }
 
-describe("Cli tests", () => {
+describe("Acl tests", () => {
 
     beforeEach(async () => {
         DI.clear();

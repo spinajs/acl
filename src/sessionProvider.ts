@@ -1,10 +1,7 @@
 import { SessionProvider, ISession } from "./interfaces";
 import { Autoinject } from "@spinajs/di";
 import { Configuration } from "@spinajs/configuration";
-
-// tslint:disable-next-line: no-var-requires
-const { Random, charset64 } = require("entropy-string");
-
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Session base class
@@ -22,10 +19,7 @@ export class Session implements ISession {
     private _sessionId: string;
 
     constructor() {
-
-        // generate session id with high entropy for security reasons
-        const random = new Random(charset64);
-        this._sessionId = random.string(256);
+        this._sessionId = uuidv4();
     }
 }
 

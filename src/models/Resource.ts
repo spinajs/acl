@@ -8,7 +8,6 @@ export class Resource extends ModelBase<Resource>{
     @Primary()
     public Id : number;
 
-    @Unique()
     public Slug : string;
 
     public Name : string;

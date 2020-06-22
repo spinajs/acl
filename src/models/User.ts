@@ -1,4 +1,3 @@
-import { GroupToUser } from './GroupToUser';
 import { ModelBase, Primary, Connection, Model, Unique, CreatedAt, SoftDelete, HasMany, HasManyToMany , Relation} from "@spinajs/orm";
 import { UserMetadata } from "./UserMetadata";
 import { UserToRole } from "./UserToRole";
@@ -6,7 +5,6 @@ import { Role } from "./Role";
 import { Resource } from "./Resource";
 import _ = require("lodash");
 import { ResourcePermission } from "../interfaces";
-import { Group } from './Group';
 
 
 /**
@@ -20,10 +18,8 @@ export class User extends ModelBase<User>  {
     @Primary()
     public Id: number;
 
-    @Unique()
     public Email: string;
 
-    @Unique()
     public Login: string;
 
     /**
@@ -64,12 +60,6 @@ export class User extends ModelBase<User>  {
      */
     @HasManyToMany(UserToRole, Role)
     public Roles: Relation<Role>;
-
-    /**
-     * Assigned groups to user
-     */
-    @HasManyToMany(GroupToUser, Group)
-    public Groups: Relation<Group>;
 
     /**
      * Fast resource lookup for access checking

@@ -78,7 +78,7 @@ export abstract class AuthProvider<U = User>
 {
     public abstract exists(user: U): Promise<boolean>;
 
-    public abstract authenticate(login: string, password: string): Promise<U>;
+    public abstract authenticate(email: string, password: string): Promise<U>;
 }
 
 export abstract class SessionProvider<T = ISession>
