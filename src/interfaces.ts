@@ -1,4 +1,5 @@
 import { User } from "./models/User";
+import { AsyncModule } from "@spinajs/di";
 
 /**
  * Permissions given to resources
@@ -81,7 +82,7 @@ export abstract class AuthProvider<U = User>
     public abstract authenticate(email: string, password: string): Promise<U>;
 }
 
-export abstract class SessionProvider<T = ISession>
+export abstract class SessionProvider<T = ISession> extends AsyncModule
 {
     /**
      * 

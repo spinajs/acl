@@ -1,10 +1,12 @@
 import { Cli, ICliCommand } from "@spinajs/cli";
 import { Logger, Log } from "../../../log/lib";
-import { User } from "../models/User";
+import { User as UserModel } from "../models/User";
+import { Autoinject } from "@spinajs/di";
+import { Orm } from "@spinajs/orm";
 
 
 @Cli("acl:user <login>", "Get info about specified user and attached roles")
-export class Roles implements ICliCommand {
+export class User implements ICliCommand {
 
     @Logger()
     protected Log: Log;
@@ -13,15 +15,18 @@ export class Roles implements ICliCommand {
         return "User info";
     }
 
+    @Autoinject(Orm)
+    protected Orm: Orm;
+
     public async execute(login: string) {
 
         try {
 
-            const user = await User.where({
+            const user = await UserModel.where({
                 Email: login
             })
                 .populate("Roles")
-                .populate("Metadata").first<User>();
+                .populate("Metadata").first<UserModel>();
 
             if (!user) {
                 this.Log.info(`User ${login} not exists in db`)

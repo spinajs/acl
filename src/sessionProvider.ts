@@ -1,5 +1,5 @@
 import { SessionProvider, ISession } from "./interfaces";
-import { Autoinject } from "@spinajs/di";
+import { Autoinject, IContainer } from "@spinajs/di";
 import { Configuration } from "@spinajs/configuration";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,12 +14,17 @@ export class Session implements ISession {
 
     public Expiration: Date;
 
-    public Data : any;
+    public Data: any;
 
     private _sessionId: string;
 
-    constructor() {
-        this._sessionId = uuidv4();
+    constructor(data: any) {
+
+        if (data) {
+            Object.assign(this, data);
+        } else {
+            this._sessionId = uuidv4();
+        }
     }
 }
 
@@ -47,6 +52,11 @@ export class MemorySessionProvider<T = ISession> extends SessionProvider<T> {
         }
 
         return null;
+    }
+
+    // tslint:disable-next-line: no-empty
+    public async resolveAsync(_container: IContainer) {
+
     }
 
     public async deleteSession(sessionId: string): Promise<void> {

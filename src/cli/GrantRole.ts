@@ -2,7 +2,8 @@ import { Cli, ICliCommand } from "@spinajs/cli";
 import { Logger, Log } from "../../../log/lib";
 import { User } from "../models/User";
 import { Role } from "../models/Role";
-import { InsertBehaviour } from '@spinajs/orm';
+import { InsertBehaviour, Orm } from '@spinajs/orm';
+import { Autoinject } from "@spinajs/di";
 
 
 @Cli("acl:role-grant <login> <role>", "Adds role to user")
@@ -10,6 +11,9 @@ export class GrantRole implements ICliCommand {
 
     @Logger()
     protected Log: Log;
+    
+    @Autoinject()
+    protected Orm: Orm;
 
     public get Name(): string {
         return "Add user metadata";

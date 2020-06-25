@@ -12,7 +12,7 @@ export class AclInitialMigration extends OrmMigration {
             table.int("Id").autoIncrement().primaryKey();
             table.string("Login", 64).unique().notNull();
             table.string("Email", 64).unique().notNull();
-            table.string("Password", 64).notNull();
+            table.string("Password", 128).notNull();
             table.string("NiceName", 64).notNull();
             table.dateTime("RegisteredAt").default("0000-00-00 00:00:00");
             table.dateTime("CreatedAt").notNull();
@@ -116,7 +116,7 @@ export class AclInitialMigration extends OrmMigration {
     private async fillUp(connection: OrmDriver) {
         const roles = [
             {
-                Slug: "admin.user",
+                Slug: "admin.users",
                 Name: "User management",
                 Description: "User administration privliges ( add, delete, update users )",
                 Resources: [{

@@ -3,7 +3,7 @@ import { Logger, Log } from "../../../log/lib";
 import { User } from "../models/User";
 
 @Cli("acl:role-revoke <login> <role>", "Revoke role from user")
-export class GrantRole implements ICliCommand {
+export class RevokeRole implements ICliCommand {
 
     @Logger()
     protected Log: Log;

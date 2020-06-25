@@ -4,7 +4,7 @@ import { Resource } from "../models/Resource";
 
 
 @Cli("acl:resources", "List all resources in acl")
-export class Roles implements ICliCommand {
+export class Resources implements ICliCommand {
 
     @Logger()
     protected Log: Log;

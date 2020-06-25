@@ -22,5 +22,5 @@ module.exports = {
             // 10 minutes session expiration  time
             expiration: 10 * 60
         }
-    },
+    }
 }
