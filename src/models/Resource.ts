@@ -1,23 +1,22 @@
-import {ModelBase, Primary, Connection, Model, JunctionTable } from "@spinajs/orm";
-import { RoleToResource } from "./RoleToResource";
+import { ModelBase, Primary, Connection, Model, JunctionTable } from '@spinajs/orm';
+import { RoleToResource } from './RoleToResource';
 
-@Connection("default")
-@Model("resources")
-export class Resource extends ModelBase<Resource>{
+@Connection('default')
+@Model('resources')
+export class Resource extends ModelBase<Resource> {
+  @Primary()
+  public Id: number;
 
-    @Primary()
-    public Id : number;
+  public Slug: string;
 
-    public Slug : string;
+  public Name: string;
 
-    public Name : string;
+  public Description: string;
 
-    public Description : string;
-
-    /**
-     * Juntion table data for role-resources many-to-many relation.
-     * Contains permission for this resource and owner role
-     */
-    @JunctionTable()
-    public Permission : RoleToResource;
+  /**
+   * Juntion table data for role-resources many-to-many relation.
+   * Contains permission for this resource and owner role
+   */
+  @JunctionTable()
+  public Permission: RoleToResource;
 }
