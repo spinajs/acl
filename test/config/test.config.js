@@ -42,7 +42,9 @@ module.exports =
     },
     db: {
         DefaultConnection: "sqlite",
-        MigrateOnStartup: true,
+        Migration:{
+            Startup: true,
+        },
         Connections: [
             {
                 Debug: {

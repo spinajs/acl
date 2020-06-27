@@ -10,10 +10,10 @@ export class UserToRole extends ModelBase<UserToRole>
     /**
      * Relation field
      */
-    public user_id: Buffer;
+    public user_id: number;
 
     /**
      * Relation field
      */
-    public role_id: Buffer;
+    public role_id: number;
 }

@@ -8,23 +8,42 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export class Session implements ISession {
 
-    public get SessionId(): string {
-        return this._sessionId;
-    }
+    public SessionId : string;
 
     public Expiration: Date;
 
     public Data: any;
 
-    private _sessionId: string;
+    public Creation : Date;
 
     constructor(data: any) {
 
         if (data) {
             Object.assign(this, data);
-        } else {
-            this._sessionId = uuidv4();
         }
+
+        if (!this.SessionId) {
+            this.SessionId = uuidv4();
+        }
+
+        if (!this.Expiration) {
+            this.Expiration = new Date();
+            this.Expiration.setMinutes(this.Expiration.getMinutes() + 60);
+        }
+
+        if(!this.Creation){
+            this.Creation = new Date();
+        }
+    }
+
+
+    /**
+     * Extends lifetime of session
+     * 
+     * @param minutes hom mutch to extend
+     */
+    public extend(minutes: number) {
+        this.Expiration.setMinutes(this.Expiration.getMinutes() + minutes);
     }
 }
 
@@ -67,21 +86,15 @@ export class MemorySessionProvider<T = ISession> extends SessionProvider<T> {
 
     public async updateSession(session: ISession): Promise<void> {
         this.Sessions.set(session.SessionId, session);
-
-        session.Expiration = this._getExpirationTime();
     }
 
     public async refreshSession(sessionId: string): Promise<void> {
         if (this.Sessions.has(sessionId)) {
             const session = this.Sessions.get(sessionId);
 
-            session.Expiration = this._getExpirationTime();
+            session.extend(this.Configuration.get<number>("acl.session.expiration", 10));
+
         }
     }
 
-    private _getExpirationTime() {
-        const expirationDate = new Date();
-        expirationDate.setSeconds(expirationDate.getSeconds() + this.Configuration.get(["acl", "session", "expiration"], 10 * 60));
-        return expirationDate;
-    }
 }

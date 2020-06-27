@@ -17,7 +17,7 @@ import { ResourcePermission } from "../interfaces";
 export class User extends ModelBase<User>  {
     
     @Primary()
-    public Id: string;
+    public Id: number;
 
     public Email: string;
 

@@ -9,7 +9,7 @@ import { ResourcePermission } from "../interfaces";
 export class RoleToResource extends ModelBase<RoleToResource>
 {
     @Primary()
-    public Id: string;
+    public Id: number;
 
     @Set()
     public Permissions: ResourcePermission[];

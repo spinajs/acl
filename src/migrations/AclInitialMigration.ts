@@ -32,7 +32,7 @@ export class AclInitialMigration extends OrmMigration {
             table.string("Slug", 32).unique().notNull();
             table.string("Name", 128).notNull();
             table.text("Description");
-            table.string("parent_slug");
+            table.int("parent_id");
         });
 
         await connection.schema().createTable("user_to_role", (table) => {
@@ -81,7 +81,6 @@ export class AclInitialMigration extends OrmMigration {
             .columns(["Slug"]);
 
         await connection.index()
-            .unique()
             .table("roles")
             .name("role_parent_idx")
             .columns(["parent_slug"]);

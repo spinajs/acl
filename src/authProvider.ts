@@ -7,7 +7,7 @@ import { Autoinject, Container } from "@spinajs/di";
 export class SimpleDbAuthProvider implements AuthProvider<User> {
 
     @Autoinject()
-    protected Container : Container;
+    protected Container: Container;
 
     public async exists(user: User | string): Promise<boolean> {
         const result = await User.where("Email", (user instanceof User) ? user.Email : user).first();
@@ -33,7 +33,18 @@ export class SimpleDbAuthProvider implements AuthProvider<User> {
         if (valid) {
 
             await result.Metadata.populate();
-            await result.Roles.populate();
+            await result.Roles.populate(function () {
+
+                // all parents role recirsive 
+                this.populate("Parent", function(){
+
+                    // with their assigned resources
+                    this.populate("Resources");
+                });
+
+                // first level of roles
+                this.populate("Resources");
+            });
 
             return result;
         }

@@ -6,7 +6,7 @@ import { RoleToResource } from "./RoleToResource";
 export class Resource extends ModelBase<Resource>{
 
     @Primary()
-    public Id : string;
+    public Id : number;
 
     public Slug : string;
 

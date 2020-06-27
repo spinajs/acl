@@ -4,12 +4,11 @@ import { AsyncModule } from "@spinajs/di";
 /**
  * Permissions given to resources
  */
-export enum ResourcePermission
-{
+export enum ResourcePermission {
     /**
      * Allows read resources
      */
-    Get  = "get",
+    Get = "get",
 
     /**
      * Allows to edit & insert new resources
@@ -26,7 +25,7 @@ export enum ResourcePermission
      */
     Any = "*"
 }
- 
+
 export interface ISession {
 
     /**
@@ -40,9 +39,22 @@ export interface ISession {
     Expiration: Date;
 
     /**
+     * Session creation date. After that date session is invalid
+     */
+    Creation: Date;
+
+    /**
      * Data holds by session
      */
     Data: any;
+
+    /**
+     * 
+     * Extends session lifetime
+     * 
+     * @param minutes how mutch to extend
+     */
+    extend(minutes: number): void;
 }
 
 
@@ -82,8 +94,7 @@ export abstract class AuthProvider<U = User>
     public abstract authenticate(email: string, password: string): Promise<U>;
 }
 
-export abstract class SessionProvider<T = ISession> extends AsyncModule
-{
+export abstract class SessionProvider<T = ISession> extends AsyncModule {
     /**
      * 
      * Load session from store. If not exists or expired returns null
@@ -114,5 +125,5 @@ export abstract class SessionProvider<T = ISession> extends AsyncModule
      * 
      * @param sessionId session to refres
      */
-    public abstract refreshSession(sessionId: string): Promise<void>;
+    public abstract refreshSession(sessionId: string | ISession): Promise<void>;
 }

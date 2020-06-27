@@ -5,7 +5,7 @@ import { ModelBase, Primary, Connection, Model } from "@spinajs/orm";
 export class UserMetadata extends ModelBase<UserMetadata>
 {
     @Primary()
-    public Id: string;
+    public Id: number;
 
     public Key: string;
 

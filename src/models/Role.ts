@@ -10,7 +10,7 @@ import { RoleToResource } from "./RoleToResource";
 export class Role extends ModelBase<Role>
 {
     @Primary()
-    public Id: string;
+    public Id: number;
 
     /**
      * role slug used in app
