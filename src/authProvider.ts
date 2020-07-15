@@ -19,7 +19,7 @@ export class SimpleDbAuthProvider implements AuthProvider<User> {
     const pwd = this.Container.resolve<PasswordProvider>(PasswordProvider);
     const result = await User.where({
       Email: email,
-    }).first<User>();
+    }).andWhere("DeletedAt", null).first<User>();
 
     if (!result) {
       return null;
@@ -28,9 +28,9 @@ export class SimpleDbAuthProvider implements AuthProvider<User> {
     const valid = await pwd.verify(result.Password, password);
     if (valid) {
       await result.Metadata.populate();
-      await result.Roles.populate(function() {
+      await result.Roles.populate(function () {
         // all parents role recirsive
-        this.populate('Parent', function() {
+        this.populate('Parent', function () {
           // with their assigned resources
           this.populate('Resources');
         });

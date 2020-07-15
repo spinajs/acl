@@ -5,9 +5,9 @@ import { Autoinject } from '@spinajs/di';
 import { Role } from '../models/Role';
 
 @Cli('acl:new-role <slug> <name>', 'Adds new role to system')
-@Option('-p, --parent <parent>', 'Parent role to inherit permissions')
-@Option('-d, --description <description>', 'Resource description')
-export class NewResource implements ICliCommand {
+@Option('-o, --owner <owner>', 'Parent role to inherit permissions')
+@Option('-d, --desc <description>', 'Resource description')
+export class NewRole implements ICliCommand {
   @Logger()
   protected Log: Log;
 
@@ -20,14 +20,15 @@ export class NewResource implements ICliCommand {
 
   public async execute(Slug: string, Name: string, command: any) {
     try {
+
       const role = new Role({
         Slug,
         Name,
-        Description: command.description?.trim(),
+        Description: command.desc?.trim(),
       });
 
-      if (command.parent) {
-        const parent = await Role.where('slug', command.parent).firstOrFail<Role>();
+      if (command.owner) {
+        const parent = await Role.where('slug', command.owner.trim()).firstOrFail<Role>();
         role.parent_id = parent.Id;
       }
 

@@ -20,9 +20,9 @@ export class AclInitialMigration extends OrmMigration {
         .notNull();
       table.string('Password', 128).notNull();
       table.string('NiceName', 64).notNull();
-      table.dateTime('RegisteredAt').default('0000-00-00 00:00:00');
+      table.dateTime('RegisteredAt');
       table.dateTime('CreatedAt').notNull();
-      table.dateTime('DeletedAt').default('0000-00-00 00:00:00');
+      table.dateTime('DeletedAt');
     });
 
     await connection.schema().createTable('user_metadatas', table => {
@@ -128,7 +128,7 @@ export class AclInitialMigration extends OrmMigration {
       .index()
       .table('roles')
       .name('role_parent_idx')
-      .columns(['parent_slug']);
+      .columns(['parent_id']);
 
     await connection
       .index()

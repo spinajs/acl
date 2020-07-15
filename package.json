@@ -1,6 +1,6 @@
 {
   "name": "@spinajs/acl",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "framework user acl module",
   "main": "lib/index.js",
   "private": false,
@@ -12,7 +12,7 @@
     "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
@@ -37,11 +37,11 @@
   },
   "homepage": "https://github.com/spinajs/acl#readme",
   "dependencies": {
-    "@spinajs/cli": "^1.0.1",
+    "@spinajs/cli": "^1.0.5",
     "@spinajs/configuration": "^1.0.10",
-    "@spinajs/di": "^1.0.17",
+    "@spinajs/di": "^1.0.19",
     "@spinajs/exceptions": "^1.0.3",
-    "@spinajs/log": "^1.0.7",
+    "@spinajs/log": "^1.0.8",
     "@spinajs/orm": "^1.0.44",
     "@spinajs/reflection": "^1.0.7",
     "@types/uuid": "^8.0.0",
